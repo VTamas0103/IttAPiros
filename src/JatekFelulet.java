@@ -1,9 +1,9 @@
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -20,6 +20,7 @@ public class JatekFelulet extends javax.swing.JFrame {
     public JatekFelulet() {
         initComponents();
         ujJatekHaromPohar();
+        tippDebKereses();
     }
 
     @SuppressWarnings("unchecked")
@@ -191,6 +192,7 @@ public class JatekFelulet extends javax.swing.JFrame {
 
     private void miUjJatekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miUjJatekActionPerformed
         ujJatekHaromPohar();
+        lbVisszajelzes.setText("");
     }//GEN-LAST:event_miUjJatekActionPerformed
 
     private void btPoharBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPoharBActionPerformed
@@ -207,6 +209,7 @@ public class JatekFelulet extends javax.swing.JFrame {
 
     private void miHaromPoharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miHaromPoharActionPerformed
         ujJatekHaromPohar();
+        lbVisszajelzes.setText("");
     }//GEN-LAST:event_miHaromPoharActionPerformed
 
     private void miMentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMentesActionPerformed
@@ -214,11 +217,13 @@ public class JatekFelulet extends javax.swing.JFrame {
     }//GEN-LAST:event_miMentesActionPerformed
 
     private void miBetoltesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBetoltesActionPerformed
+        tippDebKereses();
         try {
             beolvas();
         } catch (IOException ex) {
             Logger.getLogger(JatekFelulet.class.getName()).log(Level.SEVERE, null, ex);
         }
+        lbVisszajelzes.setText("");
     }//GEN-LAST:event_miBetoltesActionPerformed
 
     /**
@@ -293,11 +298,6 @@ public class JatekFelulet extends javax.swing.JFrame {
             default:
                 break;
         }
-        System.out.println(golyo);
-        System.out.println(poharA);
-        System.out.println(poharB);
-        System.out.println(poharC);
-
     }
 
     private void tipp(int szam) {
@@ -333,9 +333,7 @@ public class JatekFelulet extends javax.swing.JFrame {
             FileWriter fileIras = new FileWriter("config.txt");
             fileIras.write(valami);
             fileIras.close();
-            System.out.println("Sikeres Mentés");
         } catch (IOException e) {
-            System.out.println("Nem sikeres");
             e.printStackTrace();
         }
     }
@@ -359,5 +357,15 @@ public class JatekFelulet extends javax.swing.JFrame {
             default:
                 break;
         }
+    }
+
+    private void tippDebKereses() {
+        File f = new File("tipp.deb");
+        if (f.exists()) {
+            this.setTitle(golyo + "");
+        } else {
+            this.setTitle("Nincs ilyen file");
+        }
+
     }
 }
