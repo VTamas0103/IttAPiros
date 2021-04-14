@@ -1,5 +1,13 @@
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class JatekFelulet extends javax.swing.JFrame {
@@ -114,9 +122,19 @@ public class JatekFelulet extends javax.swing.JFrame {
         mnFajl.add(miUjJatek);
 
         miMentes.setText("Mentés");
+        miMentes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMentesActionPerformed(evt);
+            }
+        });
         mnFajl.add(miMentes);
 
         miBetoltes.setText("Betöltés");
+        miBetoltes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miBetoltesActionPerformed(evt);
+            }
+        });
         mnFajl.add(miBetoltes);
 
         jMenuBar1.add(mnFajl);
@@ -184,12 +202,24 @@ public class JatekFelulet extends javax.swing.JFrame {
     }//GEN-LAST:event_btPoharCActionPerformed
 
     private void cbUjHelyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbUjHelyActionPerformed
-        
+
     }//GEN-LAST:event_cbUjHelyActionPerformed
 
     private void miHaromPoharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miHaromPoharActionPerformed
         ujJatekHaromPohar();
     }//GEN-LAST:event_miHaromPoharActionPerformed
+
+    private void miMentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMentesActionPerformed
+        mentes();
+    }//GEN-LAST:event_miMentesActionPerformed
+
+    private void miBetoltesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBetoltesActionPerformed
+        try {
+            beolvas();
+        } catch (IOException ex) {
+            Logger.getLogger(JatekFelulet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_miBetoltesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -267,19 +297,67 @@ public class JatekFelulet extends javax.swing.JFrame {
         System.out.println(poharA);
         System.out.println(poharB);
         System.out.println(poharC);
-        
+
     }
 
     private void tipp(int szam) {
-        
+
         if (golyo == szam) {
             lbVisszajelzes.setText("Talált! c:");
             ujJatekHaromPohar();
-        }else{
+        } else {
             lbVisszajelzes.setText("Nem talált! :c");
         }
         if (cbUjHely.isSelected()) {
             ujJatekHaromPohar();
+        }
+    }
+
+    private void mentes() {
+        String valami = "";
+        switch (golyo) {
+            case 1:
+                valami = "poharA;";
+                break;
+            case 2:
+                valami = "poharB;";
+                break;
+            case 3:
+                valami = "poharC;";
+                break;
+            default:
+                break;
+        }
+        valami += "false;";
+        try {
+            FileWriter fileIras = new FileWriter("config.txt");
+            fileIras.write(valami);
+            fileIras.close();
+            System.out.println("Sikeres Mentés");
+        } catch (IOException e) {
+            System.out.println("Nem sikeres");
+            e.printStackTrace();
+        }
+    }
+
+    private void beolvas() throws IOException {
+        List<String> mentes = Files.readAllLines(Paths.get("config.txt"));
+        String[] tomb = mentes.get(0).split(";");
+        switch (tomb[0]) {
+            case "poharA":
+                poharA = true;
+                golyo = 1;
+                break;
+            case "poharB":
+                poharB = true;
+                golyo = 2;
+                break;
+            case "poharC":
+                poharC = true;
+                golyo = 3;
+                break;
+            default:
+                break;
         }
     }
 }
